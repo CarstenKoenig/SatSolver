@@ -26,7 +26,12 @@ On top of this sits a simple expression parser that can handle simple strings li
 
 ### Example
 
-    p => q | ~r
+    p => ~q & p; p | r
+
+    .. SAT - tester ..
+    please input your system of sentences (separeted by ';'):
+    p => ~q & p; p | r
+    the system [p => ~q & p; p | r] is satisfied by p=True, q=False
 
 
 ## Usage
