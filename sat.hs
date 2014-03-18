@@ -46,8 +46,10 @@ satTest :: String -> String
 satTest input = case parseSystem input of
                     Left err         -> "Error while parsing\n" ++ err
                     Right ans        -> "the system [" ++ input ++ (prettyPrint . trySatisfy $ ans)
-  where prettyPrint Nothing   = "] is NOT satisfiable" 
-        prettyPrint (Just ta) = "] is satisfied by " ++ (intercalate ", " . map showAssoc $ M.assocs ta)
+  where prettyPrint Nothing   = "] is NOT satisfiable - it contraticts itself"
+        prettyPrint (Just ta)
+          | M.null ta         = "] is satisfied by every truth-assignment - it's an tautology"
+          | otherwise         = "] is satisfied by " ++ (intercalate ", " . map showAssoc $ M.assocs ta)
         showAssoc (v, b)      = v ++ "=" ++ show b
 
 -- | tries to satisfy a given system - returns 'Nothing' or 'Just' the found truth-assignment
