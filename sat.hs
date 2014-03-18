@@ -119,15 +119,15 @@ simplify ta (OrS a b)   = case (simplify ta a, simplify ta b) of
 simplify ta (ImplS a b) = case (simplify ta a, simplify ta b) of
                             (FalseS, _)              -> TrueS
                             (a', TrueS)              -> a'
-                            (a', FalseS)             -> simplify ta (NotS a')
+                            (a', FalseS)             -> simplify ta $ NotS a'
                             (TrueS, b')              -> b'
-                            (a', b')                 -> ImplS a' b'
+                            (a', b')                 -> simplify ta $ OrS (NotS a') b'
 simplify ta (EqS a b)   = case (simplify ta a, simplify ta b) of
                             (TrueS, b')              -> b'
-                            (FalseS, b')             -> simplify ta (NotS b')
+                            (FalseS, b')             -> simplify ta $ NotS b'
                             (a', TrueS)              -> a'
-                            (a', FalseS)             -> simplify ta (NotS a')
-                            (a', b')                 -> EqS a' b'
+                            (a', FalseS)             -> simplify ta $ NotS a'
+                            (a', b')                 -> simplify ta $ AndS (ImplS a' b') (ImplS b' a')
 
 -- | finds the first not assoziated variable in a system
 firstFreeVar :: System -> Maybe Variable
